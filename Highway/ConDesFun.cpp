@@ -39,6 +39,7 @@ Attiki::~Attiki(){
     for(int i = 0; i < this->NSegs; i++){
         delete segment[i];              
     }
+
     delete[] segment;
 }
 
@@ -80,51 +81,50 @@ Entrance::~Entrance(){
     for(int i = 0; i < this->total_tolls; i++){
         delete toll[i];
     }
+
     delete[] toll;
 }
 
-Worker_Toll::Worker_Toll(int k, int EntranceID, int TollID, int nsegs) : Entrance_ID(EntranceID), K(k), Vehicles_served(0), Toll(){ //Initialize
+Worker_Toll::Worker_Toll(int k, int EntranceID, int TollID, int nsegs) : Entrance_ID(EntranceID), K(k), Vehicles_served(0), Toll(){
     int range = (2*K) - K + 1;
-    int waiting_cars =rand()%range + K; //The cars that the tolls will create is K to 2*K
+    int waiting_cars = rand()%range + K; // The cars that the tolls will create is K to 2*K
 
-    for(int i = 0; i < waiting_cars; i++){ //Every toll may have different amount of vehicles
+    for(int i = 0; i < waiting_cars; i++){ // Every toll may have different amount of vehicles
         int range = nsegs-(Entrance_ID+1)+1;
-        int random_exit_juction =rand()%range + (Entrance_ID+1); //Making the random juction (entrance) a vehicle wants to exit
-        Toll_Vehicle.push_back(Vehicle(-1, random_exit_juction)); //Making a list of vehicles and calling the constructor to make them
+        int random_exit_juction =rand()%range + (Entrance_ID+1);    // Making the random juction (entrance) a vehicle wants to exit
+        Toll_Vehicle.push_back(Vehicle(-1, random_exit_juction));   // Making a list of vehicles and calling the constructor to make them
     }
 }
 
-eToll::eToll(int k, int EntranceID, int TollID, int nsegs) : Entrance_ID(EntranceID), K(2*k), Vehicles_served(0), Toll(){ //Initialize
+eToll::eToll(int k, int EntranceID, int TollID, int nsegs) : Entrance_ID(EntranceID), K(2*k), Vehicles_served(0), Toll(){
     int range = (2*K) - K + 1;
-    int waiting_cars = rand()%range + K; //The cars that the tolls will create is K to 2*K
+    int waiting_cars = rand()%range + K;
 
-    for(int i = 0; i < waiting_cars; i++){ //Every toll may have different amount of vehicles
+    for(int i = 0; i < waiting_cars; i++){
         int range = nsegs-(Entrance_ID+1)+1;
-        int random_exit_juction = rand() % range + (Entrance_ID+1); //Making the random juction (entrance) a vehicle wants to exit
-        Toll_Vehicle.push_back(Vehicle(-1, random_exit_juction)); //Making a list of vehicles and calling the constructor to make them
+        int random_exit_juction = rand() % range + (Entrance_ID+1);
+        Toll_Vehicle.push_back(Vehicle(-1, random_exit_juction));
     }
 }
-
-/*Methods*/
 
 void Attiki::operate(int percentage){
     Total_Vehicles = 0;
 
     for(int i = 0; i < NSegs; i++){
-        Total_Vehicles = Total_Vehicles + segment[i]->get_no_of_vehicles(); //Calculating the total vehicles attiki highway has
+        Total_Vehicles = Total_Vehicles + segment[i]->get_no_of_vehicles(); // Calculating the total amount of vehicles attiki highway has
     }
 
     cout << "There are " << Total_Vehicles << " vehicles in attiki highway." << endl;
     
     for(int i = NSegs-1; i >= 0; i--){
-        segment[i]->operate(i+1, percentage); //Segment[NSegs] so we need NSeg number for the array
+        segment[i]->operate(i+1, percentage); // Segment[NSegs] so we need NSeg number for the array
     }
 }
 
 void Segment::operate(int current_segment, int exit_percent){
-    if(Segment_Vehicle.size() > 0){ //If there are no vehicles then it has no meaning to select random vehicle
+    if(Segment_Vehicle.size() > 0){ // If there are no vehicles then it has no meaning to select random vehicle
         int exit_percentage = (int)((double)Segment_Vehicle.size()*(double)exit_percent)/100;
-        int random_vehicle = rand()%Segment_Vehicle.size(); //Select one random vehicle*
+        int random_vehicle = rand() % Segment_Vehicle.size(); // Select one random vehicle*
         int loop = 0, not_ready_vehicles = 0;
 
         for(int i = 0; i < Segment_Vehicle.size(); i++){
@@ -134,24 +134,24 @@ void Segment::operate(int current_segment, int exit_percent){
         }
 
         while(loop < exit_percentage){ 
-            if(loop == not_ready_vehicles){ //There is a chance that we dont have exit_percentage amount of vehicles that are ready //90%->10 = 9...we may have*
-                break;                      //Instead we may have less...so we need to stop when those vehicles is ready            //011001111...we need to stop at 3
+            if(loop == not_ready_vehicles){ // There is a chance that we dont have exit_percentage amount of vehicles that are ready // 90%->10 = 9...we may have*
+                break;                      // Instead we may have less...so we need to stop when those vehicles is ready            // 011001111...we need to stop at 3
             }
-            if(Segment_Vehicle[random_vehicle].get_exit_status() == false){ //*see if it is possible to assign the new value**
+            if(Segment_Vehicle[random_vehicle].get_exit_status() == false){ // *see if it is possible to assign the new value**
                 Segment_Vehicle[random_vehicle].set_exit_status();
-                random_vehicle = (random_vehicle+1)%Segment_Vehicle.size(); //**and then go to the next one
+                random_vehicle = (random_vehicle+1)%Segment_Vehicle.size(); // **and then go to the next one
                 ++loop;
             }else{
                 random_vehicle = (random_vehicle+1)%Segment_Vehicle.size();
             }
         }
-        this->exit(current_segment); //All segments have exits but there must be at least 1 vehicle to exit the segment
+        this->exit(current_segment); // All segments have exits but there must be at least 1 vehicle to exit the segment
     }
-    if(current_segment > 1){ //First segment doesnt have a segment before it....it has only 1 segment after
+    if(current_segment > 1){ // First segment doesnt have a segment before it...it has only 1 segment after
         previous->pass(current_segment-1);
     }
 
-    this->enter(last, segment_capacity, current_segment, &Segment_Vehicle); //Passing the vector's address to Toll::operate via Entrance::operate
+    this->enter(last, segment_capacity, current_segment, &Segment_Vehicle); // Passing the vector's address to Toll::operate via Entrance::operate
 
     if((entrance->get_delay() == true) && (get_ready_to_pass() > get_passed())){
         cout << "Delays in the entrance of the junction " << entrance->get_id() << ". Delays after the junction " << entrance->get_id() << endl;
@@ -160,45 +160,47 @@ void Segment::operate(int current_segment, int exit_percent){
     }else{
         cout << "Maintain safety distances in the section after the junction " << entrance->get_id() << endl;
     }
-    set_passed(false);          //false = variable goes back to zero to be 
-    set_ready_to_pass(false);   //ready for the next loop**
+
+    set_passed(false);          // false = variable goes back to zero to be 
+    set_ready_to_pass(false);   // ready for the next loop**
 }
 
 void Segment::exit(int current_segment){
-    for(it = Segment_Vehicle.begin(); it != Segment_Vehicle.end(); it++){ //Start from the vector's beggining at stop at the end
-        if((it->get_exit_status() == true) && (it->get_exit_juction() == current_segment)){ //it = pointer that showing the vector's obgject
-            Segment_Vehicle.erase(it); //Delete vector's object wherever it is pointing to
-            --it; //Return back to the begin
+    for(it = Segment_Vehicle.begin(); it != Segment_Vehicle.end(); it++){
+        if((it->get_exit_status() == true) && (it->get_exit_juction() == current_segment)){ // it = pointer that showing the vector's object
+            Segment_Vehicle.erase(it);
+            --it; // Return back to the begin
         }
     }
 }
 
 void Segment::pass(int current_segment){
-    for(it = Segment_Vehicle.begin(); it != Segment_Vehicle.end(); it++){ //Start from the vector's beggining at stop at the end
+    for(it = Segment_Vehicle.begin(); it != Segment_Vehicle.end(); it++){
         if((it->get_exit_status() == true) && (it->get_exit_juction() > current_segment)){
-            set_ready_to_pass(true); //Calculating how many are ready before the pass so we can show the message in Segment::operate....**true = ++ the variable
+            set_ready_to_pass(true); // Calculating how many are ready before the pass so we can show the message in Segment::operate....**true = ++ the variable
         }
     }
-    for(it = Segment_Vehicle.begin(); it!=Segment_Vehicle.end(); it++){ //Start from the vector's beggining at stop at the end
-        if(next->Segment_Vehicle.size() < next->segment_capacity){  //Dont extend segment capacity
+
+    for(it = Segment_Vehicle.begin(); it!=Segment_Vehicle.end(); it++){
+        if(next->Segment_Vehicle.size() < next->segment_capacity){
             if((it->get_exit_status() == true) && (it->get_exit_juction() > current_segment)){
-                set_passed(true); //Calculating how many passes so we can show the message in Segment::operate....**true = ++ the variable
-                next->Segment_Vehicle.push_back(*it);  //Need to insert the specific it vehicle to the next vehicle array (vector)
-                next->Segment_Vehicle.back().set_moving_seg(current_segment+1); //After the pass to the next seg the vehicle is moving to the new one
-                next->Segment_Vehicle.back().set_exit_status(); //When a vehicle is ready to pass from seg to seg it doesnt mean its ready to pass to the next one
-                Segment_Vehicle.erase(it); //Delete vector's object wherever it is pointing to
+                set_passed(true); // Calculating how many passes so we can show the message in Segment::operate....**true = ++ the variable
+                next->Segment_Vehicle.push_back(*it);  // Need to insert this specific vehicle to the next vehicle array (vector)
+                next->Segment_Vehicle.back().set_moving_seg(current_segment+1); // After the pass to the next seg the vehicle is moving to the new one
+                next->Segment_Vehicle.back().set_exit_status(); // When a vehicle is ready to pass from seg to seg it doesnt mean its ready to pass to the next one
+                Segment_Vehicle.erase(it);
                 --it; //Return back to the begin
             }
         }
     }
 }
 
-void Segment::enter(int nsegs, int segment_capacity, int current_segment, vector<Vehicle>* Segment_Vehicle){ //Here is the pointer that shows the vector
-    this->entrance->operate(nsegs, segment_capacity, current_segment, Segment_Vehicle); //Passing this pointer to Entrance::operate
+void Segment::enter(int nsegs, int segment_capacity, int current_segment, vector<Vehicle>* Segment_Vehicle){ // Here is the pointer that shows the vector
+    this->entrance->operate(nsegs, segment_capacity, current_segment, Segment_Vehicle); // Passing this pointer to Entrance::operate
 }
 
 void Entrance::operate(int nsegs, int segment_capacity, int current_segment, vector<Vehicle>* Segment_Vehicle){
-    int vehicles_passes = 0, max_number = 0, waiting_vehicles = 0, x=0; //Some variables we need in this scope
+    int vehicles_passes = 0, max_number = 0, waiting_vehicles = 0, x = 0; // Some variables in this scope
 
     for(int i = 0; i < total_tolls; i++){
         toll[i]->set_vehicles_served();
@@ -208,17 +210,17 @@ void Entrance::operate(int nsegs, int segment_capacity, int current_segment, vec
 
     while((*Segment_Vehicle).size() < segment_capacity){
         if(toll[x]->get_vehicles_served() == toll[x]->get_k()){ //
-            if(vehicles_passes == max_number){                  //If you served K vehicles you are done
-                break;                                          //Next please.
-            }else{                                              //But if all tolls served the maximum
-                x = (x+1)%(total_tolls);                        //amount of vehicles (max_number)
-                continue;                                       //then stop it all..you cant serve more vehicles
+            if(vehicles_passes == max_number){                  // If you served K vehicles you are done
+                break;                                          // Next please.
+            }else{                                              // But if all tolls served the maximum
+                x = (x+1) % (total_tolls);                      // amount of vehicles (max_number)
+                continue;                                       // then stop it all..you cant serve more vehicles
             }                                                   //
         } 
 
-        toll[x]->operate(nsegs, current_segment, Segment_Vehicle); //Passing pointer to vector to Toll::operate
+        toll[x]->operate(nsegs, current_segment, Segment_Vehicle); // Passing pointer to vector to Toll::operate
         vehicles_passes++;
-        x = (x+1)%(total_tolls); //Go to the next toll to serve a vehicle
+        x = (x+1) % (total_tolls); // Go to the next toll to serve a vehicle
     }
 
     if(vehicles_passes < max_number){
@@ -241,22 +243,22 @@ void Entrance::operate(int nsegs, int segment_capacity, int current_segment, vec
 
 void Worker_Toll::operate(int nsegs, int current_segment, vector<Vehicle>* Segment_Vehicle){
     it = Toll_Vehicle.begin();
-    (*Segment_Vehicle).push_back(*it);  //Need to insert the specific it vehicle to the next vehicle array (vector)
-    Toll_Vehicle.erase(it); //Delete list's object wherever it is pointing to
-    (*Segment_Vehicle).back().set_moving_seg(current_segment); //When a vehicle enters we need to set the moving segment
+    (*Segment_Vehicle).push_back(*it);  // Need to insert the specific vehicle to the next vehicle array (vector)
+    Toll_Vehicle.erase(it); // Delete list's object wherever it is pointing to
+    (*Segment_Vehicle).back().set_moving_seg(current_segment); // When a vehicle enters we need to set the moving segment
     ++Vehicles_served;
     int range = nsegs-(Entrance_ID+1)+1;
-    int random_exit_juction =rand()%range + (Entrance_ID+1); //Making the random juction (entrance) a vehicle wants to exit
-    Toll_Vehicle.push_back(Vehicle(-1, random_exit_juction)); //Inserting in the list of vehicles and calling the constructor to make the vehicle
+    int random_exit_juction =rand()%range + (Entrance_ID+1);    // Making the random juction (entrance) a vehicle wants to exit
+    Toll_Vehicle.push_back(Vehicle(-1, random_exit_juction));   // Inserting in the list of vehicles and calling the constructor to make the vehicle
 }
 
 void eToll::operate(int nsegs, int current_segment, vector<Vehicle>* Segment_Vehicle){
     it = Toll_Vehicle.begin();
-    (*Segment_Vehicle).push_back(*it);  //Need to insert the specific it vehicle to the next vehicle array (vector)
-    Toll_Vehicle.erase(it); //Delete list's object wherever it is pointing to
-    (*Segment_Vehicle).back().set_moving_seg(current_segment); //When a vehicle enters we need to set the moving segment
+    (*Segment_Vehicle).push_back(*it);
+    Toll_Vehicle.erase(it);
+    (*Segment_Vehicle).back().set_moving_seg(current_segment);
     ++Vehicles_served;
     int range = nsegs-(Entrance_ID+1)+1;
-    int random_exit_juction =rand()%range + (Entrance_ID+1); //Making the random juction (entrance) a vehicle wants to exit
-    Toll_Vehicle.push_back(Vehicle(-1, random_exit_juction)); //Inserting in the list of vehicles and calling the constructor to make the vehicle
+    int random_exit_juction =rand()%range + (Entrance_ID+1);
+    Toll_Vehicle.push_back(Vehicle(-1, random_exit_juction));
 }

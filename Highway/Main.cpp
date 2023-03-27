@@ -22,13 +22,13 @@ int main(int argc, char* argv[]){
     return 0;
   }
 
-  Attiki* attiki = new Attiki(K, NSegs); //Allocate memory for attiki class and calling the constructor
+  Attiki* attiki = new Attiki(K, NSegs);
 
   for(int i=0; i<N; i++){
     attiki->operate(Percent);
   }
 
-  delete attiki; //Delete the allocation of attiki
-
+  delete attiki;
+  
   return 0;
 }

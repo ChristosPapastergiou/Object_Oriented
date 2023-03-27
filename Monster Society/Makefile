@@ -1,15 +1,22 @@
-all: Main\
-	ConDesFun\
-	Project
+CC = g++
 
-Main: Main.cpp
-	g++ -c -std=c++11 Main.cpp
+CFLAGS = -Wall -Werror -g -I$(INCLUDE)
+LDFLAGS = -lm
 
-ConDesFun: ConDesFun.cpp
-	g++ -c -std=c++11 ConDesFun.cpp
+OBJS = Main.o ConDesFun.o
 
-Project: Main.cpp ConDesFun.cpp
-	g++ -o Project Main.cpp ConDesFun.cpp
+EXEC = Main
+
+ARGS = 200 5000 60 70 70
+
+$(EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
 
 clean:
-	rm -f Main ConDesFun
+	rm -f $(OBJS) $(EXEC)
+
+run: $(EXEC)
+	./$(EXEC) $(ARGS)
+
+valgrind: $(EXEC)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGS)

@@ -1,4 +1,3 @@
-//Project2
 #include <iostream>
 #include "Class.h"
 
@@ -10,48 +9,50 @@ int main(int argc, char* argv[]){
         return 0;
     }
 
-    int K = atoi(argv[1]); //
-    int M = atoi(argv[2]); //Project's variables
-    int N = atoi(argv[3]); //
-    int L = atoi(argv[4]); //
+    int K = atoi(argv[1]);
+    int M = atoi(argv[2]);
+    int N = atoi(argv[3]);
+    int L = atoi(argv[4]);
 
-    Bank* bank = new Bank(K, L); //Calling bank's constructor
+    Bank* bank = new Bank(K, L);
 
     int in = 0, out = 0;
-    for(int i=0; i<M; i++){
-        for(int j=0; j<N; j++){
-            if(bank->enter() == true){  //The loop to enter customers
-                ++in;                   //in the bank
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            if(bank->enter() == true){  // Enter customers in the ban
+                ++in;
             }else{
                 ++out;
             }
         }
-        for(int j=0; j<in; j++){        //The loop to serve
-            bank->serve();              //the customers in the bank
+
+        for(int j = 0; j < in; j++){    // Serve the customers in the bank
+            bank->serve();
             bank->waiting_customers();
             bank->open_cashiers();
         }
         in = 0;
     }
+
     while(out > 0){
         int out1 = out;
         out = 0;
-        for(int i=0; i<out1; i++){
-            if(bank->enter() == true){  //The loop to enter the rest 
-                ++in;                   //customers in the bank
+        for(int i = 0; i < out1; i++){
+            if(bank->enter() == true){  // Enter the rest customers in the bank
+                ++in;
             }else{
                 ++out;
             }
         }
-        for(int j=0; j<in; j++){        //The loop to serve
-            bank->serve();              //the rest customers in the bank
+        for(int j=0; j<in; j++){        // Serve the rest customers in the bank
+            bank->serve();
             bank->waiting_customers();
             bank->open_cashiers();
         }
         in = 0;
     }
 
-    delete bank; //Delete the alloc i did for the bank when i called the constructor
+    delete bank;
 
     return 0;
 }

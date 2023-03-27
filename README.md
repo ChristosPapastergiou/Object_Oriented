@@ -1,4 +1,4 @@
-# Object-Oriented
+# Object Oriented Programming
 
 Programming in Object Oriented style and simulating some every day actions
 

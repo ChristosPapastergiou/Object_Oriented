@@ -9,7 +9,7 @@ private:
     string title;
     string author;
 public:
-    Books::Books(string Title, string Author, int isbn):author(Author), title(Title), ISBN(isbn){}
+    Books(string Title, string Author, int isbn) : author(Author), title(Title), ISBN(isbn){}
     ~Books(){}
     void printdetails(){cout << "Book details : " << title << " by " << author << " with ISBN number " << ISBN << endl;}
 };

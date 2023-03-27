@@ -1,5 +1,6 @@
 # Object-Oriented
-Programming in object-oriented style and simulating some every day actions
+
+Programming in Object Oriented style and simulating some every day actions
 
 -------------------------------
 How to compile and run
@@ -14,5 +15,3 @@ java :
 
 	compile : javac Hierarchy.java  
 	run     : java Hierarchy arg1 arg2 (arg3)
-  
-Have fun.

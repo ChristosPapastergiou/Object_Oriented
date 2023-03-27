@@ -6,8 +6,9 @@ How to compile and run
 -------------------------------
 c++  :
 
-	compile : make
-	run     : ./Project arg1 arg2 arg3 arg4
+	compile : make run
+	
+	For different args just go into the make file and change it
   
 java :
 

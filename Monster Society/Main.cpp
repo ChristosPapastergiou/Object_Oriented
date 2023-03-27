@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
 
   Creature_society* creature_society = new Creature_society(N, L, good_thrsh, bad_thrsh);
 
-  for(int i=0; i<M; i++){   
+  for(int i = 0; i < M; i++){   
     int random_seat = rand() % N;   // Pick random creature to bless or beat it,
     int random_act = rand() % 2;
 

@@ -4,8 +4,9 @@
 
 using namespace std;
 
-Bank::Bank(int _K, int _L) : L(_L), K(_K), cashiernumber(5), last_customer(1), curr_serving(1), open_cashier_counter(0), next_cashier(-1){ //Initialize
-    this->cashier = new Cashier*[cashiernumber]; // Allocate space for the cashiers
+Bank::Bank(int _K, int _L) : L(_L), K(_K), cashiernumber(5), last_customer(1), curr_serving(1), open_cashier_counter(0), next_cashier(-1){
+    this->cashier = new Cashier*[cashiernumber];
+
     for(int i = 0; i < cashiernumber; i++){
         this->cashier[i] = new Cashier(i, L);
     }
@@ -14,13 +15,13 @@ Bank::Bank(int _K, int _L) : L(_L), K(_K), cashiernumber(5), last_customer(1), c
 }
 Bank::~Bank(){
     for(int i = 0; i < cashiernumber; i++){
-        delete cashier[i]; // Deallocation
+        delete cashier[i];
     }
+
     delete[] cashier;
 }
 
-Cashier::Cashier(int id, int _L):L(_L), ID(++id), open_flag(false), serving_flag(false), customer_served(0){ //Initialize
-}
+Cashier::Cashier(int id, int _L) : L(_L), ID(++id), open_flag(false), serving_flag(false), customer_served(0){}
 
 bool Bank::enter(){
     if(check_to_open() == true){                        // Checking if we need to open another cashier

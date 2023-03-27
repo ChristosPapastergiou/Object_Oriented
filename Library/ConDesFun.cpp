@@ -14,10 +14,10 @@ Library::Library(int _NMAX) : BookNumber(0), ShelfNumber(3), CupboardNumber(1), 
     this->shelves = new Shelves*[ShelfNumber];
     this->cupboard = new Cupboard*[CupboardNumber];
 
-    for(int i=0; i<this->ShelfNumber; i++){
+    for(int i = 0; i < this->ShelfNumber; i++){
         this->shelves[i] = new Shelves(_NMAX, i);
     }
-    for(int j=0; j<this->CupboardNumber; j++){
+    for(int j = 0; j < this->CupboardNumber; j++){
         this->cupboard[j] = new Cupboard(_NMAX, CupboardShelfNumber, j+2);
     } 
 }
@@ -39,7 +39,7 @@ Library::~Library(){
     delete[] base;
 }
 
-Shelves::Shelves(int _NMAX, int id):NMAX(_NMAX), counterbooks(0){
+Shelves::Shelves(int _NMAX, int id) : NMAX(_NMAX), counterbooks(0){
     this->ID = ++id;
     this->books = new Books*[_NMAX];
     cout << "A shelf just created with maximun capacity : " << NMAX << " and ID of : " << ID << endl;
@@ -50,7 +50,7 @@ Shelves::~Shelves(){
     cout << "A shelf has been destroyed" << endl;
 }
 
-Cupboard::Cupboard(int _NMAX, int _CupboardShelfNumber, int id):NMAX(_NMAX), ShelfNumber(_CupboardShelfNumber){
+Cupboard::Cupboard(int _NMAX, int _CupboardShelfNumber, int id) : NMAX(_NMAX), ShelfNumber(_CupboardShelfNumber){
     this->shelves = new Shelves*[ShelfNumber];
     cout << "The cupboard has been created" << endl;
 
@@ -154,6 +154,7 @@ bool Shelves::shelf_place_book(Books* novel, int randomShelf){
     if(counterbooks < NMAX){
         ++counterbooks;
         books[counterbooks-1] = novel;
+
         if(randomShelf == 1){
             cout << "Placing book in upper bookcase shelf. ";
         }else if(randomShelf == 2){
@@ -177,6 +178,7 @@ bool Shelves::shelf_take_book(int randomShelf){
     if(counterbooks > 0){
         --counterbooks;
         books[counterbooks] = NULL;
+
         if(randomShelf == 1){
             cout << "Taking book from upper bookcase shelf. ";
         }else if(randomShelf == 2){

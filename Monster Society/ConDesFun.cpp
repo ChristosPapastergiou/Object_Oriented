@@ -29,9 +29,10 @@ Creature_society::Creature_society(int N, int L, int good_threshold, int bad_thr
 }
 
 Creature_society::~Creature_society(){
-    for(int i=0; i<this->total; i++){
+    for(int i = 0; i < this->total; i++){
         delete creature[i];
     }
+
     delete[] creature;
     cout << "The creature society has been destroyed" << endl;
 }
@@ -59,7 +60,7 @@ Bad_creature::Bad_creature(const int L, Creature_society* index, string name, co
     cout << this->get_name()  << ", a bad creature just created." << endl;
 }
 
-Bad_creature::Bad_creature(const Bad_creature& the_bad_clone):Creature(the_bad_clone){
+Bad_creature::Bad_creature(const Bad_creature& the_bad_clone) : Creature(the_bad_clone){
     this->threshold = the_bad_clone.threshold; // Copying the threshold to the new creature
     cout << this->get_name()  << "'s bad clone just made with name : " << this->get_name() << " and life of " << this->get_life() << " points."<< endl;
 }

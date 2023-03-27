@@ -9,7 +9,7 @@ private:
     int exit_junction, moving_seg;
     bool exit_status;
 public:
-    Vehicle(int segment_position, int exit):moving_seg(segment_position), exit_junction(exit), exit_status(false){} //Initialize
+    Vehicle(int segment_position, int exit):moving_seg(segment_position), exit_junction(exit), exit_status(false){}
     ~Vehicle(){}
     bool get_exit_status(){return exit_status;}
     int get_exit_juction(){return exit_junction;}
@@ -19,7 +19,7 @@ public:
 
 class Toll{
 protected:
-    list<Vehicle> Toll_Vehicle; //List of vehicles that are waiting to enter attiki highway
+    list<Vehicle> Toll_Vehicle; // List of vehicles that are waiting to enter attiki highway
     list<Vehicle>::iterator it;
 public:
     Toll(){}

@@ -20,7 +20,7 @@ int main(int argc, char* argv[]){
     int in = 0, out = 0;
     for(int i = 0; i < M; i++){
         for(int j = 0; j < N; j++){
-            if(bank->enter() == true){  // Enter customers in the ban
+            if(bank->enter() == true){  // Enter customers in the bank
                 ++in;
             }else{
                 ++out;
@@ -45,7 +45,7 @@ int main(int argc, char* argv[]){
                 ++out;
             }
         }
-        for(int j=0; j<in; j++){        // Serve the rest customers in the bank
+        for(int j = 0; j < in; j++){        // Serve the rest customers in the bank
             bank->serve();
             bank->waiting_customers();
             bank->open_cashiers();

@@ -1,6 +1,7 @@
-#include <iostream>
-#include "Class.h"
 #include <time.h> 
+#include <iostream>
+
+#include "Class.h"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ int main(int argc, char* argv[]){
 
   Attiki* attiki = new Attiki(K, NSegs);
 
-  for(int i=0; i<N; i++){
+  for(int i = 0; i < N; i++){
     attiki->operate(Percent);
   }
 

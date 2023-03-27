@@ -1,6 +1,7 @@
-#include <iostream>
-#include <vector>
 #include <list>
+#include <vector>
+#include <iostream>
+
 #include "Class.h"
 
 #define MinTolls 3     // Minimun and maximum amount 
@@ -42,47 +43,46 @@ Attiki::~Attiki(){
 }
 
 Segment::Segment(int k, int NSegs, int id) : ID(id), segment_capacity(rand()%((MaxSegCap) - (MinSegCap+1) + 1) + (MinSegCap)), random_cars_in_segment(rand()%segment_capacity + 1), last(NSegs), ready_to_pass(0), vehicles_passed(0){ //Initialize
-    for(int i = 0; i < this->random_cars_in_segment; i++){ //Segment has a capacity but it doesnt mean that i have to fill it with vehicles
+    for(int i = 0; i < this->random_cars_in_segment; i++){ // Segment has a capacity but it doesnt mean that i have to fill it with vehicles
         int range = NSegs-ID+1;
-        int random_exit_juction = rand()%range+ID; //Making the random juction (entrance) a vehicle wants to exit
-        Segment_Vehicle.push_back(Vehicle(ID, random_exit_juction)); //Making a vector of vehicles and calling the constructor to make them
+        int random_exit_juction = rand()%range+ID; // Random juction (entrance) a vehicle wants to exit
+        Segment_Vehicle.push_back(Vehicle(ID, random_exit_juction)); // Vector of vehicles
     }
-    this->entrance = new Entrance(k, NSegs, id-1); //i-1 = Entrance's ID (Segment(NSeg) -> Entrance(NSeg-1))
+    this->entrance = new Entrance(k, NSegs, id-1); // i-1 = Entrance's ID (Segment(NSeg) -> Entrance(NSeg-1))
 }
 
 Segment::~Segment(){
     delete entrance;
 }
 
-Entrance::Entrance(int k, int NSegs, int id) : ID(id), total_tolls(rand()%((MaxTolls - MinTolls) + 1) + MinTolls){
-    this->toll = new Toll*[total_tolls]; //Allocate memory for the total amount of tolls attiki highway has
+Entrance::Entrance(int k, int NSegs, int id) : ID(id), total_tolls(rand() % ((MaxTolls - MinTolls) + 1) + MinTolls){
+    this->toll = new Toll*[total_tolls];
 
-    for(int i = 0; i < 2; i++){
-        if(i == 0){                                             //
-            this->toll[i] = new Worker_Toll(k, ID, i, NSegs);   //Making at least 1
-        }else{                                                  //worker toll and 
-            this->toll[i] = new eToll(k, ID, i, NSegs);         //1 e-toll
-        }                                                       //
+    for(int i = 0; i < 2; i++){ // Making at least 1 worker toll and 1 e-toll
+        if(i == 0){     
+            this->toll[i] = new Worker_Toll(k, ID, i, NSegs);
+        }else{
+            this->toll[i] = new eToll(k, ID, i, NSegs);
+        }
     }
 
-    for(int i = 2; i < this->total_tolls; i++){
-        int random_toll = rand()%2;                             //
-        if(random_toll == 0){                                   //Making all the other 
-            this->toll[i] = new Worker_Toll(k, ID, i, NSegs);   //tolls randomly....
-        }else{                                                  //if random is 0 i will make workertoll
-            this->toll[i] = new eToll(k, ID, i, NSegs);         //and if random is 1 i will make e-toll
-        }                                                       //
+    for(int i = 2; i < this->total_tolls; i++){ // Making all the other tolls randomly
+        int random_toll = rand()%2;
+        if(random_toll == 0){
+            this->toll[i] = new Worker_Toll(k, ID, i, NSegs);
+        }else{
+            this->toll[i] = new eToll(k, ID, i, NSegs);
+        }
     }
 }
 
 Entrance::~Entrance(){
-    for(int i = 0; i < this->total_tolls; i++){ //Freeing the allocs i did for the n segments
+    for(int i = 0; i < this->total_tolls; i++){
         delete toll[i];
     }
     delete[] toll;
 }
 
-// Toll parent class
 Worker_Toll::Worker_Toll(int k, int EntranceID, int TollID, int nsegs) : Entrance_ID(EntranceID), K(k), Vehicles_served(0), Toll(){ //Initialize
     int range = (2*K) - K + 1;
     int waiting_cars =rand()%range + K; //The cars that the tolls will create is K to 2*K
@@ -223,19 +223,19 @@ void Entrance::operate(int nsegs, int segment_capacity, int current_segment, vec
 
     if(vehicles_passes < max_number){
         for(int i = 0; i < total_tolls; i++){
-            if(toll[i]->get_k() != 0){ //We cant decrease K more than 0
-                toll[i]->set_k(true); //true = --K
+            if(toll[i]->get_k() != 0){  // We cant decrease K more than 0
+                toll[i]->set_k(true);   // true = --K
             }
         }
     }else{
         for(int i = 0; i < total_tolls; i++){
-            toll[i]->set_k(false); //false = ++K
+            toll[i]->set_k(false); // false = ++K
         }
     }
     if(vehicles_passes < waiting_vehicles){
-        set_delay(true);        //
-    }else{                      //True = show the messages at Segment::operate
-        set_delay(false);       //
+        set_delay(true);    // True = show the messages at Segment::operate
+    }else{                      
+        set_delay(false);
     }
 }
 

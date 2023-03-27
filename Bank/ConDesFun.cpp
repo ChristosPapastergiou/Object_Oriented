@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "Class.h"
 
 using namespace std;
@@ -20,8 +21,6 @@ Bank::~Bank(){
 
 Cashier::Cashier(int id, int _L):L(_L), ID(++id), open_flag(false), serving_flag(false), customer_served(0){ //Initialize
 }
-
-/* Methods */
 
 bool Bank::enter(){
     if(check_to_open() == true){                        // Checking if we need to open another cashier

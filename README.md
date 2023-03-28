@@ -15,5 +15,3 @@ java :
 
 	compile : javac Hierarchy.java  
 	run     : java Hierarchy arg1 arg2 (arg3)
-
-The point of those projects is to make you understand how classes and methods works.

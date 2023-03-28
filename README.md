@@ -7,9 +7,9 @@ How to compile and run
 -------------------------------
 c++  :
 
-	compile : make run
+	compile & run : make run
 	
-	For different args just go into the make file and change it
+	(For different args just go into the make file and change it)
   
 java :
 

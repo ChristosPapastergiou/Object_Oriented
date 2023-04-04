@@ -1,6 +1,5 @@
-import java.util.Random; // Import package to use random 
+import java.util.Random; 
 
-// Hierarchy's class and the only public class
 public class Hierarchy{
     // Auction method/function
     public static void auction(Artifacts[] art, String My_Movement, String My_Condition){
@@ -35,10 +34,10 @@ public class Hierarchy{
             String[] random_technique = new String[]{"oil", "aquarelle", "tempera"}; // Array of what techniques are valid
             String[] random_material = new String[]{"iron", "stone", "wood"}; // Array of what materials are valid
             String Creator = random_creator[random.nextInt(5)]+I; // Making the CreatorI
-            String Movement = random_movement[random.nextInt(3)], Condition = random_condition[random.nextInt(3)]; // Picking 
-            String Technique = random_technique[random.nextInt(3)], Material = random_material[random.nextInt(3)]; // random array[i]
+            String Movement = random_movement[random.nextInt(3)], Condition = random_condition[random.nextInt(3)];
+            String Technique = random_technique[random.nextInt(3)], Material = random_material[random.nextInt(3)];
             
-            if(random_artifact == 0){ // Calling the constructor and assign it to a Artifact[]
+            if(random_artifact == 0){
                 art[i] = new Paintings(Index, Year, Creator, Movement, Condition, Lenght, Width, Technique, Surface);  
             }else{                                                                                                    
                 art[i] = new Sculptures(Index, Year, Creator, Movement, Condition, Volume, Material);
@@ -59,7 +58,6 @@ class Artifacts{
         creator = Creator;
     }
 
-    // Methods
     protected void getInfo(){System.out.println("The Creator is " + creator + ". The artifact was made in year " + year + ".");}
     protected void getIndex(){System.out.println("The Index number is " + index);}
     protected void evaluate(String Movement, String Condition){} //dummy to have access....artifact->masterpiece->paintings/sculpture
@@ -75,8 +73,7 @@ class Masterpiece extends Artifacts{
         movement = Movement;
         condition = Condition;
     }
-    
-    // Methods
+
     @Override
     protected void getInfo(){
         super.getInfo(); //super = call parent's method 
@@ -103,7 +100,6 @@ class Paintings extends Masterpiece{
         surface = Surface;
     }
 
-    // Methods
     @Override
     protected void getInfo(){
         super.getInfo(); // super = call parent's method 
@@ -144,8 +140,7 @@ class Sculptures extends Masterpiece{
         volume = Volume;
         material = Material;
     }
-    
-    // Methods
+
     @Override
     protected void getInfo(){
         super.getInfo(); // super = call parent's method 

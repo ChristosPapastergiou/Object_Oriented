@@ -6,8 +6,12 @@
 using namespace std;
 
 int main(int argc, char* argv[]){
-  if((argc != 5)){
-    cout << "Too many arguments or not enough. Try again" << endl;
+  if(argc != 5){
+    if(argc < 5){
+      printf("Not enough arguments. Try again.\n");
+      return 0;
+    }
+    printf("Too many arguments. Try again.\n");
     return 0;
   }
 

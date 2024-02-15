@@ -10,7 +10,7 @@ C++ program :
 
 	compile & run : make run
   
-java program :
+Java program :
 
 	compile : javac Hierarchy.java  
 	run     : java Hierarchy arg1 arg2 (arg3)

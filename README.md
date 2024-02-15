@@ -2,16 +2,15 @@
 
 Programming in Object Oriented style and simulating some every day actions
 
--------------------------------
-How to compile and run
--------------------------------
-c++  :
+# Compilation & Run
+
+In order to run any program go into the respective file. Then if it is 
+
+C++ program :
 
 	compile & run : make run
-	
-	(For different args just go into the make file and change it)
   
-java :
+java program :
 
 	compile : javac Hierarchy.java  
 	run     : java Hierarchy arg1 arg2 (arg3)
